@@ -12,7 +12,7 @@ import cPickle as pickle
 import glob
 import random
 from tqdm import tqdm
-from eliaLib import dataRepresentation
+from eliaLib import dataRepresentation #image container for loading images and saliency maps
 from constants import *
 
 img_size = INPUT_SIZE
@@ -20,16 +20,19 @@ salmap_size = INPUT_SIZE
 
 # Resize train/validation files
 
+# split up training and test set -> cross validation
+# list of raw saliency maps
 listImgFiles = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToMaps, '*'))]
+# list of all test images in folder of all images
 listTestImages = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(pathToImages, '*test*'))]
 
-for currFile in tqdm(listImgFiles):
-    tt = dataRepresentation.Target(os.path.join(pathToImages, currFile + '.jpg'),
-                                   os.path.join(pathToMaps, currFile + '.mat'),
-                                   os.path.join(pathToFixationMaps, currFile + '.mat'),
+for currFile in tqdm(listImgFiles): #load images for every available saliency map
+    tt = dataRepresentation.Target(os.path.join(pathToImages, currFile + '.jpg'), #imagePath
+                                   os.path.join(pathToMaps, currFile + '.mat'), #saliencyPath
+                                   os.path.join(pathToFixationMaps, currFile + '.mat'), #fixationPath 
                                    dataRepresentation.LoadState.loaded, dataRepresentation.InputType.image,
                                    dataRepresentation.LoadState.loaded, dataRepresentation.InputType.saliencyMapMatlab,
-                                   dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty)
+                                   dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty) #no fixations used
 
     # if tt.image.getImage().shape[:2] != (480, 640):
     #    print 'Error:', currFile
@@ -48,8 +51,8 @@ for currFile in tqdm(listTestImages):
                                    os.path.join(pathToMaps, currFile + '.mat'),
                                    os.path.join(pathToFixationMaps, currFile + '.mat'),
                                    dataRepresentation.LoadState.loaded,dataRepresentation.InputType.image,
-                                   dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty,
-                                   dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty)
+                                   dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty, #no mat files
+                                   dataRepresentation.LoadState.unloaded, dataRepresentation.InputType.empty) #no fixation files
 
     imageResized = cv2.cvtColor(cv2.resize(tt.image.getImage(), img_size, interpolation=cv2.INTER_AREA),
                                 cv2.COLOR_RGB2BGR)

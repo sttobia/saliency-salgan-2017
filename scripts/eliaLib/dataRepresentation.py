@@ -4,6 +4,7 @@ from enum import Enum
 import scipy.io
 
 
+# derived class of parent class Enum -> Enumeration
 class InputType(Enum):
     image = 0
     imageGrayscale = 1
@@ -11,7 +12,7 @@ class InputType(Enum):
     fixationMapMatlab = 3
     empty = 100
 
-
+# derived class of parent class Enum -> Enumeration
 class LoadState(Enum):
     unloaded = 0
     loaded = 1
@@ -21,6 +22,7 @@ class LoadState(Enum):
 
 ###############################################################################################
 
+# creates image container and loads images according to the parameters calling it
 class ImageContainer:
     def __init__(self, filePath, imageType, state=LoadState.unloaded):
 
@@ -36,6 +38,8 @@ class ImageContainer:
             self.loadCompressed()
         else:
             raise Exception('Unknown state when loading image')
+            
+           
 
     def load(self):
 
@@ -53,6 +57,7 @@ class ImageContainer:
             self.state = LoadState.loaded
         elif self.imageType == InputType.empty:
             self.data = None
+            
 
     def loadCompressed(self):
 
@@ -92,7 +97,7 @@ class ImageContainer:
             elif self.state == LoadState.loadedCompressed:
                 raise Exception('Saliency maps do no have compressed handlind method enabled')
                 return None
-        elif self.imageType == InputType.fixationMapMatlab:
+       elif self.imageType == InputType.fixationMapMatlab:
             if self.state == LoadState.unloaded:
                 return (scipy.io.loadmat(self.filePath)['I']).astype(np.uint8)
             elif self.state == LoadState.loaded:
@@ -102,7 +107,9 @@ class ImageContainer:
                 return None
         elif self.imageType == InputType.empty:
             return None
-
+        
+        
+ 
 
 ###############################################################################################
 
@@ -116,8 +123,8 @@ class ImageContainer:
 class Target():
     def __init__(self, imagePath, saliencyPath,fixationPath,
                  imageState=LoadState.unloaded, imageType=InputType.image,
-                 saliencyState=LoadState.unloaded, saliencyType=InputType.saliencyMapMatlab,
-                 fixationState=LoadState.unloaded, fixationType=InputType.fixationMapMatlab):
+                 saliencyState=LoadState.unloaded, saliencyType=InputType.saliencyMapMatlab),
+                 fixationState=LoadState.unloaded, fixationType=InputType.fixationMapMatlab
         self.image = ImageContainer(imagePath, imageType, imageState)
         self.saliency = ImageContainer(saliencyPath, saliencyType, saliencyState)
         self.fixation = ImageContainer(fixationPath, fixationType, fixationState)
