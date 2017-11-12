@@ -97,7 +97,7 @@ class ImageContainer:
             elif self.state == LoadState.loadedCompressed:
                 raise Exception('Saliency maps do no have compressed handlind method enabled')
                 return None
-       elif self.imageType == InputType.fixationMapMatlab:
+        elif self.imageType == InputType.fixationMapMatlab:
             if self.state == LoadState.unloaded:
                 return (scipy.io.loadmat(self.filePath)['I']).astype(np.uint8)
             elif self.state == LoadState.loaded:
@@ -111,7 +111,7 @@ class ImageContainer:
         
  
 
-###############################################################################################
+################################################################################################
 
 # class Target():
 #     def __init__(self, imagePath, saliencyPath,
@@ -123,8 +123,8 @@ class ImageContainer:
 class Target():
     def __init__(self, imagePath, saliencyPath,fixationPath,
                  imageState=LoadState.unloaded, imageType=InputType.image,
-                 saliencyState=LoadState.unloaded, saliencyType=InputType.saliencyMapMatlab),
-                 fixationState=LoadState.unloaded, fixationType=InputType.fixationMapMatlab
+                 saliencyState=LoadState.unloaded, saliencyType=InputType.imageGrayscale, #changed 
+                 fixationState=LoadState.unloaded, fixationType=InputType.fixationMapMatlab):
         self.image = ImageContainer(imagePath, imageType, imageState)
         self.saliency = ImageContainer(saliencyPath, saliencyType, saliencyState)
         self.fixation = ImageContainer(fixationPath, fixationType, fixationState)

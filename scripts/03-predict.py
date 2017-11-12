@@ -19,10 +19,10 @@ def test(path_to_images, path_output_maps, model_to_test=None):
 
 
 def main():
-    # Create network
+    # Create network, for predicting only BCE part is used.
     model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1], batch_size=8)
-    # Here need to specify the epoch of model sanpshot
-    load_weights(model.net['output'], path='gen_', epochtoload=90)
+    # Here need to specify the epoch of model snapshot
+    load_weights(model.net['output'], path='weights/own/gen_', epochtoload=90)
     # Here need to specify the path to images and output path
     test(path_to_images='../images/', path_output_maps='../saliency/', model_to_test=model)
 
