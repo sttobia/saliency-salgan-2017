@@ -25,4 +25,4 @@ INPUT_SIZE = (256, 192)
 #INPUT_SIZE = (1392, 512)
 
 # Directory to keep snapshots of current training
-DIR_TO_SAVE = '/root/workspace/output'
+DIR_TO_SAVE = '/root/workspace/output/'
