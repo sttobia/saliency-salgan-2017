@@ -54,7 +54,9 @@ def bce_batch_iterator(model, train_data, validation_sample):
         e_cost = 0.
 
         random.shuffle(train_data)
-        pbar_bce_batch = tqdm(total=nr_batches_train, desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs-1)))
+        pbar_bce_batch = tqdm(total=nr_batches_train, 
+                              desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs-1)), 
+                              leave = False)
         for currChunk in chunks(train_data, model.batch_size):
 
             if len(currChunk) != model.batch_size:
@@ -130,7 +132,9 @@ def salgan_batch_iterator(model, train_data, validation_sample):
 
         random.shuffle(train_data)
 
-        pbar_salgan_batch = tqdm(total=nr_batches_train, desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs-1)))
+        pbar_salgan_batch = tqdm(total=nr_batches_train, 
+                                 desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs-1)),
+                                 leave = False)
         for currChunk in chunks(train_data, model.batch_size):
 
             if len(currChunk) != model.batch_size:

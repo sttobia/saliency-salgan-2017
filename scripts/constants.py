@@ -12,9 +12,9 @@ pathOutputMaps = '/root/workspace/dataset/processed_data/salmaps/'
 pathToPickle = '/root/workspace/dataset/processed_data/pickle/'
 
 # Path to pickles which contains processed data
-TRAIN_DATA_DIR = '/root/workspace/pickle/fix_trainData.pickle'
-VALIDATION_DATA_DIR = '/root/workspace/pickle/fix_validationData.pickle'
-TEST_DATA_DIR = '/root/workspace/pickle/fix_testData.pickle'
+TRAIN_DATA_DIR = '/root/workspace/dataset/50_25_25/processed_data/pickle/trainData.pickle'
+VALIDATION_DATA_DIR = '/root/workspace/dataset/50_25_25/processed_data/pickle/validationData.pickle'
+TEST_DATA_DIR = '/root/workspace/dataset/50_25_25/processed_data/pickle/testData.pickle'
 
 # Path to vgg16 pre-trained weights
 PATH_TO_VGG16_WEIGHTS = '/root/workspace/weights/vgg16.pkl'
