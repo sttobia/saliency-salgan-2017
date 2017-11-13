@@ -7,6 +7,8 @@ from utils import *
 from constants import *
 from models.model_bce import ModelBCE
 
+dataset_name = '50_25_25'
+
 
 def test(path_to_images, path_output_maps, model_to_test=None):
     list_img_files = [k.split('/')[-1].split('.')[0] for k in glob.glob(os.path.join(path_to_images, '*'))]
@@ -22,9 +24,9 @@ def main():
     # Create network, for predicting only BCE part is used.
     model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1], batch_size=8)
     # Here need to specify the epoch of model snapshot
-    load_weights(model.net['output'], path='weights/own/gen_', epochtoload=90)
+    load_weights(model.net['output'], path=('weights/output/' + dataset_name + '50_25_25/gen_'), epochtoload=300)
     # Here need to specify the path to images and output path
-    test(path_to_images='../images/', path_output_maps='../saliency/', model_to_test=model)
+    test(path_to_images=(HOME_DIR + 'dataset/50_25_25/' +), path_output_maps='../saliency/', model_to_test=model)
     
     # CHANGE HERE: USE ABSOLUT OUTPUT PATH
 

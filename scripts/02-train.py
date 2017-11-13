@@ -26,13 +26,35 @@ def bce_batch_iterator(model, train_data, validation_sample):
     n_updates = 1 #flag for number of updates
     nr_batches_train = int(len(train_data) / model.batch_size)
     
+    # variables for nice output of error values:
+    col1 = 10
+    col2 = 30
+    str1 = 'Epoch'
+    str2 = 'train-loss e'
+    header = 'title'
+    
+
+       
     pbar_bce = tqdm(total=num_epochs, desc=('TRAINING BCE'))
+    
+    # print title of the table
+    pbar_bce.write('\n\n')
+    header_padding = int(round((col1 + col2 - len(header))/2))
+    header = ((header_padding * ' ') + header + (header_padding * ' '))
+    pbar_bce.write(1*(len(header)*'*' + '\n') + header.upper() + 1*('\n' + len(header)*'*'))
+    
+    # print header of table
+    pbar_bce.write('\n')
+    pbar_bce.write(str1.rjust(col1) + str2.rjust(col2))
+    pbar_bce.write((len(str1)*'-').rjust(col1) + (len(str2)*'-').rjust(col2))
+    
+    
     for current_epoch in range(num_epochs):
         
         e_cost = 0.
 
         random.shuffle(train_data)
-        pbar_bce_batch = tqdm(total=nr_batches_train, desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs)))
+        pbar_bce_batch = tqdm(total=nr_batches_train, desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs-1)))
         for currChunk in chunks(train_data, model.batch_size):
 
             if len(currChunk) != model.batch_size:
@@ -54,13 +76,15 @@ def bce_batch_iterator(model, train_data, validation_sample):
         pbar_bce_batch.close()
         e_cost /= nr_batches_train
 
-        pbar_bce.write('Epoch ' + str(current_epoch) + ' train_loss-> ' + str(e_cost))
+        # write output:
+        pbar_bce.write((str(current_epoch) + '/' + str(num_epochs-1)).rjust(col1) + str(e_cost).rjust(col2))
         
         # Save weights every 5 epochs and predict validation_sample
         if current_epoch % 5 == 0:
             np.savez(DIR_TO_SAVE + 'gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
-            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, name = None, path_output_maps=DIR_TO_SAVE)
+            predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, name = None,
+                    path_output_maps=DIR_TO_SAVE)
         pbar_bce.update(1);
     pbar_bce.close()
 
@@ -70,7 +94,35 @@ def salgan_batch_iterator(model, train_data, validation_sample):
     nr_batches_train = int(len(train_data) / model.batch_size)
     n_updates = 1 #flag for number of updates
     
+    # for creating nice output
+    col1 = 10;
+    col2 = 30;
+    col3 = col2;
+    col4 = col2;
+
+    str1 = 'Epoch'
+    str2 = 'train-loss g'
+    str3 = 'train-loss d'
+    str4 = 'train-loss e'
+    header = 'training salgan'
+
+    
     pbar_salgan = tqdm(total=num_epochs, desc=('TRAINING SALGAN'))
+    
+    # print title
+    pbar_salgan.write('\n\n')
+    header_padding = int(round((col1 + col2 + col3 + col4 - len(header))/2))
+    header = ((header_padding * ' ') + header + (header_padding * ' '))
+    pbar_salgan.write(1*(len(header)*'*' + '\n') + header.upper() + 1*('\n' + len(header)*'*'))
+
+    # print header
+    pbar_salgan.write('\n')
+    pbar_salgan.write(str1.rjust(col1) + str2.rjust(col2) + str3.rjust(col3) + str4.rjust(col4))
+    pbar_salgan.write((len(str1)*'-').rjust(col1) + (len(str2)*'-').rjust(col2) + (len(str3)*'-').rjust(col3) 
+                + (len(str4)*'-').rjust(col4))
+
+
+
     for current_epoch in range(num_epochs):
         g_cost = 0.
         d_cost = 0.
@@ -78,7 +130,7 @@ def salgan_batch_iterator(model, train_data, validation_sample):
 
         random.shuffle(train_data)
 
-        pbar_salgan_batch = tqdm(total=nr_batches_train, desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs)))
+        pbar_salgan_batch = tqdm(total=nr_batches_train, desc=('Epoch ' + str(current_epoch) + '/' + str(num_epochs-1)))
         for currChunk in chunks(train_data, model.batch_size):
 
             if len(currChunk) != model.batch_size:
@@ -119,7 +171,12 @@ def salgan_batch_iterator(model, train_data, validation_sample):
         d_cost /= nr_batches_train
         e_cost /= nr_batches_train
         
-        pbar_salgan.write('Epoch ' + str(current_epoch) + ' train_loss-> ' + str(g_cost) + ',' + str(d_cost) + ','  + str(e_cost))
+        
+        # write output
+        pbar_salgan.write((str(current_epoch) + '/' + str(num_epochs-1)).rjust(col1) 
+            + str(g_cost).rjust(col2) 
+            + (str(d_cost)).rjust(col3)
+            + (str(e_cost)).rjust(col4))
         
         # Save weights every 3 epoch and predict validation_sample
         if current_epoch % 3 == 0:
