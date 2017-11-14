@@ -11,7 +11,8 @@ from eliaLib import dataRepresentation #image container for loading images and s
 # specify if testing whole dataset or not
 train_data = 1
 # specifiy dataset to load weights from
-dataset_name = '50_25_25_v1'
+dataset_name_weights = '50_25_25_salgan_v2'
+dataset_name_images = '50_25_25'
 # specify epoch to load weights from:
 epoch_no = 300
 
@@ -19,7 +20,7 @@ def test(path_to_images, path_output_maps, model_to_test=None):
     # Load Data
     if train_data:
         # set up different input and output directory:
-        path_to_images = (HOME_DIR + 'dataset/' + dataset_name + '/raw_data/images/' )
+        path_to_images = (HOME_DIR + 'dataset/' + dataset_name_images + '/raw_data/images/' )
         path_output_maps= (HOME_DIR + 'prediction/')
         
         # get filenames:
@@ -53,7 +54,7 @@ def main():
     # Create network, for predicting only BCE part is used.
     model = ModelBCE(INPUT_SIZE[0], INPUT_SIZE[1], batch_size=8)
     # Here need to specify the epoch of model snapshot
-    load_weights(model.net['output'], path=('output/' + dataset_name + '/gen_'), epochtoload=epoch_no)
+    load_weights(model.net['output'], path=('output/' + dataset_name_weights + '/gen_'), epochtoload=epoch_no)
     # Here need to specify the path to images and output path
     test(path_to_images='../images/', path_output_maps='../saliency/', model_to_test=model)
     

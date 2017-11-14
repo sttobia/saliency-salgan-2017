@@ -12,6 +12,9 @@ from model import Model
 class ModelSALGAN(Model):
     def __init__(self, w, h, batch_size=4, G_lr=3e-4, D_lr=3e-4, alpha=1/20.):
         super(ModelSALGAN, self).__init__(w, h, batch_size)
+        
+        # self.input_var in our case is the batch input (image)
+        # self.output_var in our case is the batch output (ground truth saliency map)
 
         # Build Generator
         self.net = generator.build(self.inputHeight, self.inputWidth, self.input_var)
@@ -23,13 +26,14 @@ class ModelSALGAN(Model):
         # Set prediction function
         output_layer_name = 'output'
 
-        prediction = lasagne.layers.get_output(self.net[output_layer_name])
+        prediction = lasagne.layers.get_output(self.net[output_layer_name]) # generator output
         test_prediction = lasagne.layers.get_output(self.net[output_layer_name], deterministic=True)
-        self.predictFunction = theano.function([self.input_var], test_prediction)
+        self.predictFunction = theano.function([self.input_var], test_prediction) # function for generator output
 
-        disc_lab = lasagne.layers.get_output(self.discriminator['prob'],
+        
+        disc_lab = lasagne.layers.get_output(self.discriminator['prob'], # feeds ground truth & image
                                              T.concatenate([self.output_var, self.input_var], axis=1))
-        disc_gen = lasagne.layers.get_output(self.discriminator['prob'],
+        disc_gen = lasagne.layers.get_output(self.discriminator['prob'], # feeds prediction & image
                                              T.concatenate([prediction, self.input_var], axis=1))
 
         # Downscale the saliency maps
@@ -62,6 +66,6 @@ class ModelSALGAN(Model):
         D_params = lasagne.layers.get_all_params(self.discriminator['prob'], trainable=True)
         self.D_lr = theano.shared(np.array(D_lr, dtype=theano.config.floatX))
         D_updates = lasagne.updates.adagrad(D_obj, D_params, learning_rate=self.D_lr)
-        self.D_trainFunction = theano.function([self.input_var, self.output_var], cost, updates=D_updates,
+        self.D_trainFunction = theano.function([self.input_var, self.output_var], outputs=cost, updates=D_updates,
                                                allow_input_downcast=True)
 

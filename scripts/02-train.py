@@ -69,20 +69,20 @@ def bce_batch_iterator(model, train_data, validation_sample):
                                       dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
 
-            # train generator with one batch and discriminator with next batch
-            G_cost = model.G_trainFunction(batch_input, batch_output)
+            # train generator
+            G_cost = model.G_trainFunction(batch_input, batch_output) # = BCE between GroundTruth and batch input.
             e_cost += G_cost
             n_updates += 1
             pbar_bce_batch.update(1)
 
         pbar_bce_batch.close()
-        e_cost /= nr_batches_train
+        e_cost /= nr_batches_train # final error output = average BCE per batch (over whole epoch)
 
         # write output:
         pbar_bce.write((str(current_epoch) + '/' + str(num_epochs-1)).rjust(col1) + str(e_cost).rjust(col2))
         
-        # Save weights every 5 epochs and predict validation_sample
-        if current_epoch % 5 == 0:
+        # Save weights every 3 epochs and predict validation_sample
+        if current_epoch % 3 == 0:
             np.savez(DIR_TO_SAVE + 'gen_modelWeights{:04d}.npz'.format(current_epoch),
                      *lasagne.layers.get_all_param_values(model.net['output']))
             predict(model=model, image_stimuli=validation_sample, num_epoch=current_epoch, name = None,
@@ -92,7 +92,7 @@ def bce_batch_iterator(model, train_data, validation_sample):
 
 def salgan_batch_iterator(model, train_data, validation_sample):
 
-    num_epochs = 301
+    num_epochs = 2
     nr_batches_train = int(len(train_data) / model.batch_size)
     n_updates = 1 #flag for number of updates
     
@@ -146,15 +146,6 @@ def salgan_batch_iterator(model, train_data, validation_sample):
                                       dtype=theano.config.floatX)
             batch_output = np.expand_dims(batch_output, axis=1)
             
-            # was used for some debugging
-            #print ' '
-            #print 'Iteration:', n_updates
-            #print 'max value salmap: ', 255*np.amax(batch_output)
-            #print 'e_cost: ', e_cost, 'd_cost: ', d_cost, 'g_cost: ', g_cost
-            #print 'batch_input: ', batch_input 
-            #print 'batch output: ', batch_output
-            #print ' '
-
             # train generator with one batch and discriminator with next batch
             if n_updates % 2 == 0:
                 G_obj, D_obj, G_cost = model.G_trainFunction(batch_input, batch_output) # call generator train function
