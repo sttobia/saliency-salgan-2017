@@ -92,7 +92,7 @@ def bce_batch_iterator(model, train_data, validation_sample):
 
 def salgan_batch_iterator(model, train_data, validation_sample):
 
-    num_epochs = 2
+    num_epochs = 301
     nr_batches_train = int(len(train_data) / model.batch_size)
     n_updates = 1 #flag for number of updates
     

@@ -11,7 +11,7 @@ from eliaLib import dataRepresentation #image container for loading images and s
 # specify if testing whole dataset or not
 train_data = 1
 # specifiy dataset to load weights from
-dataset_name_weights = '50_25_25_salgan_v2'
+dataset_name_weights = '50_25_25_bce'
 dataset_name_images = '50_25_25'
 # specify epoch to load weights from:
 epoch_no = 300

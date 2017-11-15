@@ -1,17 +1,17 @@
 # Work space directory
 HOME_DIR = '/root/workspace/'
 
-# Path to raw data
-pathToImages = '/root/workspace/dataset/raw_data/images/'
-pathToMaps = '/root/workspace/dataset/raw_data/salmaps/'
-pathToFixationMaps = '/root/workspace/dataset/raw_data/fixation/'
+# Path to raw data -> USED IN PREPROCESSING
+pathToImages = '/root/workspace/dataset/90_1_9/raw_data/images/'
+pathToMaps = '/root/workspace/dataset/90_1_9/raw_data/salmaps/'
+pathToFixationMaps = '/root/workspace/dataset/90_1_9/raw_data/fixation/'
 
-# Path to processed data
-pathOutputImages = '/root/workspace/dataset/processed_data/images/'
-pathOutputMaps = '/root/workspace/dataset/processed_data/salmaps/'
-pathToPickle = '/root/workspace/dataset/processed_data/pickle/'
+# Path to processed data -> USED IN PREPROCESSING
+pathOutputImages = '/root/workspace/dataset/90_1_9/processed_data/images/'
+pathOutputMaps = '/root/workspace/dataset/90_1_9/processed_data/salmaps/'
+pathToPickle = '/root/workspace/dataset/90_1_9/processed_data/pickle/'
 
-# Path to pickles which contains processed data
+# Path to pickles which contains processed data -> USED IN TRAINING
 TRAIN_DATA_DIR = '/root/workspace/dataset/50_25_25/processed_data/pickle/trainData.pickle'
 VALIDATION_DATA_DIR = '/root/workspace/dataset/50_25_25/processed_data/pickle/validationData.pickle'
 TEST_DATA_DIR = '/root/workspace/dataset/50_25_25/processed_data/pickle/testData.pickle'
